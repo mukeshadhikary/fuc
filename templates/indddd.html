@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+
+<tbody>
+    {% for item in ytc_data[-20:] %}
+    <tr>
+        <td>{{ item.product_name }}</td>
+        <td>{{ item.order_no }}</td>
+        <td>{{ item.suppliers }}</td>
+        <td>{{ item.date_pickup[-5:] }}</td>
+        <td>{{ item.qty }}</td>
+        <td>{{item.ipckup}}</td>
+        <td>
+            <button type="button" class="btn btn-danger btn-sm delete-button" data-order-no="{{ item.order_no }}"
+                data-product-name="{{ item.product_name }}" style="margin-left: 10px;">Delete</button>
+        </td>
+
+    </tr>
+    {% endfor %}
+</tbody>
+</table>
+<script>
+
+    // Get the order_no and product_name from the button's data attributes
+    const orderNo = buttonElement.getAttribute('data-order-no');
+    const productName = buttonElement.getAttribute('data-product-name');
+
+    fetch(`/delete/${orderNo}`, { method: 'POST' })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert(`DELETED ${productName}`);
+                // You may want to reload or update the table after successful deletion.
+            } else {
+                alert(`Failed to DELETE ${productName} quantity`);
+            }
+        });
+
+
+</script>
+
+</html>
+
+
+
+<<<python(flask)>>>
+    # Define a route to handle product deletion
+    @app.route('/delete/<string:order_no>', methods=['POST'])
+        def delete_product(order_no):
+        ytc_record = Ytc.query.get(order_no)
+        if ytc_record:
+        db.session.delete(ytc_record)
+        db.session.commit()
+        return jsonify({'success': True})
+        else:
+        return jsonify({'success': False})
+
+
+
+        ``` i modifyed to this it stell not working ```
